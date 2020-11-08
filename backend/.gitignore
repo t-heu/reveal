@@ -1,0 +1,8 @@
+node_modules/
+.git
+.env
+service.json
+tmp/uploads/*
+!tmp/uploads/no_photo.jpg
+data/
+dist/

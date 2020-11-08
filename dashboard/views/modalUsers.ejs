@@ -1,0 +1,45 @@
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop_<%= data._id %>" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Profile - <%= data.name %></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/update/user/<%= data._id %>" method="POST">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword" name="password" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Name</label>
+            <input type="text" class="form-control" id="nameInputPassword1" name="name" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <label for="inputState">Roles</label>
+            <select id="inputState" name="roles" class="form-control">
+              <option selected></option>
+              <option>mod</option>
+              <option>admin</option>
+            </select>
+          </div>
+    
+          <button type="submit" class="btn login btn-primary loginBtn--signup" style="margin-top: 0; background-color: #fc9636; border-color: #fc9636; width: 100%;">UPDATE</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <form action="/delete/user/<%= data._id %>" method="POST">
+          <button type="submit" class="btn btn-danger">DELETE</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+{
+  "statistics": {
+    "a": 40,
+    "b": 70,
+    "c": 30,
+    "d": 5
+  },
+  "events": [],
+  "devices": [],
+  "usersData": [
+    {
+      "id": 1,
+      "password": "123",
+      "email": "aaa@gmail.com",
+      "emailVerified": true,
+      "name": "aa",
+      "photo": "no_photo.jpg",
+      "createdAt": "2020-02-22"
+    },
+    {
+      "id": 2,
+      "password": "123",
+      "email": "bbb@gmail.com",
+      "emailVerified": false,
+      "name": "bbb",
+      "photo": "no_photo.jpg",
+      "createdAt": "2020-02-22"
+    }
+  ]
+}

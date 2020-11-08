@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Reveal",
+    "slug": "Reveal",
+    "version": "1.0.5",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "primaryColor": "#27ae60",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#121212"
+    },
+    "scheme": "reveal",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "androidStatusBar": {
+      "backgroundColor": "#282828",
+      "translucent": false
+    },
+    "notification": { 
+      "icon": "./assets/iconPushNotification.png",
+      "color": "#27ae60"
+    },
+    "android": {
+      "package": "com.reveal.reveal",
+      "versionCode": 1,
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json",
+      "permissions": [
+        "CAMERA_ROLL",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

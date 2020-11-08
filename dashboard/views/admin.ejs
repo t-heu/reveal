@@ -1,0 +1,112 @@
+<% if (!user) { %>
+  <%- include('header') %>
+<% } else { %>
+  <%- include('headerLogged', {user, active_side: '2'}) %>
+<% } %>
+
+<% if(error && error != "") { %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>Error</strong>  <%= error %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+<% } %>
+
+<% if(success && success != "") { %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Success</strong>  <%= success %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+<% } %>
+
+<% if (user) { %>
+  <div class="container">
+  <div class="mt-4 nav-tables">
+    <a href="/app/user" class="nav">
+      <h2>
+        All users
+      </h2>
+    </a>
+
+    <a href="/user" class="nav active">
+      <h2 class="active">
+        Administrator
+      </h2>
+    </a>
+  </div>
+
+  <section class="box mt-4" style="overflow-x: auto;">
+    <div class="header-table">
+      <h1>Administrators</h1>
+
+      <div class="change">
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-app-indicator" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z"/>
+          <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+        </svg>
+        <p>Total <%= total %></p>
+      </div>
+    </div>
+
+    <table class="table table-striped table-dark">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Password</th>
+          <th scope="col">Role</th>
+          <th scope="col">Created At</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% users.map(r => { %>
+          <%- include('modalUsers', {data: r}) %>
+          <tr data-toggle="modal" data-target="#staticBackdrop_<%= r._id %>">
+            <td><%= r.name %></td>
+            <td><%= r.email %></td>
+            <td><%= r.password %></td>
+            <td><%= r.role %></td>
+            <td><%= r.createdAt %></td>
+          </tr>
+        <%  }) %>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="mt-4">
+    <div class="box login-or-create">
+      <h2>Create Account</h2>
+      <form action="/signup/auth" method="POST">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Email address</label>
+          <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+          <small id="emailHelp" class="form-text">The account has to be confirmed by the admin.</small>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input type="password" class="form-control" id="exampleInputPassword" name="password" placeholder="Password">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Name</label>
+          <input type="text" class="form-control" id="nameInputPassword1" name="name" placeholder="Name">
+        </div>
+        <div class="form-group">
+          <label for="inputState">Roles</label>
+          <select id="inputState" name="roles" class="form-control">
+            <option selected>mod</option>
+            <option>admin</option>
+          </select>
+        </div>
+  
+        <button type="submit" class="btn login btn-primary loginBtn--signup" style="margin-top: 0; background-color: #fc9636; border-color: #fc9636; width: 100%;">CREATE</button>
+      </form>
+    </div>
+  </section>
+</div>
+<% } %>
+
+<%- include('footer') %>
