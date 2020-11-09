@@ -39,12 +39,8 @@ function Post(data: any) {
           id: data.data.id,
         })
       }
-      style={[styles.container]}>
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+      style={styles.container}>
+      <View style={styles.container_profile}>
         <Image
           style={styles.photo}
           source={{
@@ -52,9 +48,7 @@ function Post(data: any) {
           }}
         />
 
-        <TouchableOpacity
-          onPress={() => handleSubmitLike(data.data.id)}
-          style={styles.like}>
+        <TouchableOpacity onPress={() => handleSubmitLike(data.data.id)}>
           {likes.viewer_has_liked ? (
             <AntDesign name="heart" size={25} color={'#E74C3C'} />
           ) : (
@@ -63,7 +57,7 @@ function Post(data: any) {
         </TouchableOpacity>
       </View>
 
-      <View style={{width: '80%'}}>
+      <View style={styles.container_box}>
         <View style={styles.headerPost}>
           <Text style={styles.dateText}>
             {timeSince(data.data.dateTimePosted)}
@@ -82,14 +76,13 @@ function Post(data: any) {
         </View>
 
         <Text style={styles.description}>{data.data.text}</Text>
-        <View style={{flexDirection: 'row'}}>
+        <View style={styles.footer}>
           <Text style={styles.textLiked}>{likes.viewer_count_likes} liked</Text>
           <Text style={styles.textComment}>
             {data.data.viewer_count_comments} comments
           </Text>
         </View>
       </View>
-      <View />
     </TouchableOpacity>
   );
 }
