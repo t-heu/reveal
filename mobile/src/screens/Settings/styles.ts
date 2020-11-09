@@ -40,6 +40,13 @@ const stylesSettings = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'SulSans-Light',
   },
+  textVersion: {
+    fontSize: 15,
+    color: '#888',
+    fontFamily: 'SulSans-Regular',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
 });
 
 const stylesEditsPages = StyleSheet.create({

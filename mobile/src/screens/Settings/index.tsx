@@ -1,7 +1,8 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
+import Constants from 'expo-constants';
 
 import {useAuth} from '../../hooks/auth';
 import {stylesSettings, colors} from './styles';
@@ -11,7 +12,7 @@ export default function Settings() {
   const {signout, user} = useAuth();
 
   return (
-    <ScrollView style={stylesSettings.container}>
+    <View style={stylesSettings.container}>
       <View style={stylesSettings.container}>
         <View style={stylesSettings.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -78,6 +79,10 @@ export default function Settings() {
           <View />
         </TouchableOpacity>
       </View>
-    </ScrollView>
+
+      <Text style={stylesSettings.textVersion}>
+        Version {Constants.manifest.version}
+      </Text>
+    </View>
   );
 }
