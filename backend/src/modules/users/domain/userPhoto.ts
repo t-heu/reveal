@@ -32,7 +32,7 @@ export class UserPhoto extends ValueObject<UserPhotoProps> {
       case 'firebase_storage':
         return `https://firebasestorage.googleapis.com/v0/b/inspired-skill-159220.appspot.com/o/${this.isPhotoValid(
           photo,
-        )}?alt=media&token=9ee34224-59f8-44b8-98af-ddf7dec9e239`;
+        )}?alt=media&token=9ee34224-59f8-44b8-98af-ddf7dec9e239?${Date.now()}`;
       default:
         return `${process.env.APP_URL}/files/${this.isPhotoValid(
           photo,

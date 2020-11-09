@@ -23,6 +23,7 @@ export class UpdateUserAvatarController extends BaseController {
   async executeImpl(req: Request, res: Response): Promise<any> {
     try {
       const userID = req.user.id;
+      console.log(req.file);
 
       const user = container.resolve(UpdateUserAvatarUseCase);
       const fileOfficialName = await user.execute({ id: userID });
@@ -32,6 +33,9 @@ export class UpdateUserAvatarController extends BaseController {
       const blob = bucket.file(req.file.originalname);
       const blobStream = blob.createWriteStream({
         resumable: false,
+        metadata: {
+          cacheControl: 'no-cache',
+        },
       });
 
       blobStream.on('error', err => {
