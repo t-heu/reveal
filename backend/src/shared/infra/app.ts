@@ -7,40 +7,36 @@ import 'express-async-errors';
 import { isCelebrate } from 'celebrate';
 import multer from 'multer';
 import { Server } from 'http';
-import socket from 'socket.io';
+// import socket from 'socket.io';
 
 import './providers/MailProvider';
-
+import Socket from './ws';
 import v1Router from './http/api/v1';
 import rateLimiter from './http/middlewares/rateLimiter';
 import * as AppError from '../core/AppError';
+
+// import { ClearNotificationController } from '../../modules/notification/useCase/clearNotification';
 
 dotenv.config();
 
 const app = express();
 const server = new Server(app);
-export const io = socket(server);
+Socket(server);
+// export const io = socket(server);
+// export const connectUsers: any = {};
 
-let maintenance = false;
-export const connectUsers: any = {};
-
-io.on('connection', socket => {
-  const { user } = socket.handshake.query;
-  connectUsers[user] = socket.id;
-  // console.log('PING PONG');
-  // socket.on('count_notification_not_read', data => {
-  //   if (data.clear) {
-  //     console.log(data, ' ---');
-  //   }
-  // });
-});
-
-// SOCKET.IO
-// app.use((req, res, next) => {
-//   req.io = io;
-//   // req.connectUsers = connectUsers;
-//   return next();
+// io.on('connection', socket => {
+//   const { user } = socket.handshake.query;
+//   connectUsers[user] = socket.id;
+//   // console.log('PING PONG');
+//   socket.on('count_notification_not_read', data => {
+//     if (data.clear) {
+//       console.log(data, ' --- ', socket.id);
+//       ClearNotificationController.executeImpl({ userID: '' });
+//     }
+//   });
 // });
+
 // CORS
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -58,28 +54,6 @@ app.use(helmet());
 app.use(express.json());
 app.use(rateLimiter);
 app.use(morgan('combined')); // combined, dev
-app.use(
-  (
-    request: Request,
-    response: Response,
-    _next: NextFunction,
-  ): Response | void => {
-    if (request.path === '/maintenance') {
-      if (request.query.role && request.query.role === 'admin') {
-        maintenance = request.query.check === 'true';
-      }
-    }
-
-    if (maintenance) {
-      return response.status(503).json({
-        status: 'Maintenance',
-        message: 'Will be back',
-      });
-    }
-
-    return _next();
-  },
-);
 app.use(
   '/files',
   express.static(path.resolve(__dirname, '..', '..', '..', 'tmp', 'uploads')),

@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import { io, connectUsers } from '../../../../shared/infra/app';
+import { io, connectUsers } from '../../../../shared/infra/ws';
 import { IPostRepository } from '../../../feed/repos/IPostRepo';
 import { INotificationRepository } from '../../repos/INotification';
 import { IUseCase } from '../../../../shared/domain/UseCase';
@@ -42,10 +42,12 @@ class CreateNotification implements IUseCase<Request, string> {
       user_id,
     );
 
-    // Envia nova/atualiza quantidade de notificações novas no client
-    io.to(connectUsers[user_id]).emit('count_notification_not_read', {
-      count_notification_not_read: resultCount,
-    });
+    if (io.io) {
+      // Envia nova/atualiza quantidade de notificações novas no client
+      io.io.to(connectUsers[user_id]).emit('count_notification_not_read', {
+        count_notification_not_read: resultCount,
+      });
+    }
 
     return user.notification_key;
   }

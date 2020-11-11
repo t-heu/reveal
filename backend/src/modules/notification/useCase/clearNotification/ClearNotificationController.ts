@@ -1,23 +1,16 @@
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { BaseController } from '../../../../shared/infra/BaseController';
 import ClearNotificationUseCase from './ClearNotificationUseCase';
 
-export class ClearNotificationController extends BaseController {
-  constructor() {
-    super();
-  }
+interface IRequestDTO {
+  userID: string;
+}
 
-  async executeImpl(req: Request, res: Response): Promise<any> {
-    const userID = req.user.id;
-
+export class ClearNotificationController {
+  async executeImpl({ userID }: IRequestDTO): Promise<any> {
     const response = container.resolve(ClearNotificationUseCase);
-    const result = await response.execute({
+    await response.execute({
       userID,
     });
-
-    // res.header('X-Total-Count', String(result.count));
-    return this.ok(res, result);
   }
 }

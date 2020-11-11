@@ -5,7 +5,6 @@ import {useNavigation} from '@react-navigation/native';
 import io from 'socket.io-client';
 
 import Env from '../../../environment';
-import api from '../../services/api';
 import {styles, colors} from './styles';
 import {useAuth} from '../../hooks/auth';
 import {useShareStateComponent} from '../../hooks/shareStateComponent';
@@ -32,7 +31,10 @@ export default function Header({back}: Props) {
     });
 
     if (visibleModalNotification && count > 0) {
-      api.post('/notification/read').then(() => {});
+      socket.emit('count_notification_not_read', {
+        clear: true,
+        user: user.id,
+      });
     }
 
     socket.on(
@@ -41,12 +43,6 @@ export default function Header({back}: Props) {
         setCount(Number(noti.count_notification_not_read));
       },
     );
-
-    if (!visibleModalNotification) {
-      api.get('/notification/read').then((res) => {
-        setCount(Number(res.data.count_notification_not_read));
-      });
-    }
   }, [visibleModalNotification, count, user]);
 
   return (
@@ -82,7 +78,7 @@ export default function Header({back}: Props) {
             <Feather name="bell" size={25} color={colors.primaryColor} />
           </TouchableOpacity>
 
-          <NotificationModal />
+          <NotificationModal reload={!!count} />
         </View>
 
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>

@@ -14,15 +14,18 @@ import Loading from '../Loading';
 import timeSince from '../../utils/timeSince';
 import {useShareStateComponent} from '../../hooks/shareStateComponent';
 
-export default function NotificationModal() {
-  const [data, setData] = useState([] as any);
-  const {visibleModalNotification} = useShareStateComponent();
-  const [loading, setLoading] = useState(true);
+export default function NotificationModal({reload}: any) {
   const navigation = useNavigation();
+  const {visibleModalNotification} = useShareStateComponent();
+  const [data, setData] = useState([] as any);
+  const [loading, setLoading] = useState(true);
   const [mount, setMount] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const feedLoad = useCallback(async () => {
+    if (!reload && data.length > 0) {
+      return;
+    }
     try {
       const response = await api.get('/notification');
 
@@ -32,7 +35,7 @@ export default function NotificationModal() {
       setLoading(true);
       return;
     }
-  }, []);
+  }, [reload, data]);
 
   useEffect(() => {
     if (!mount) {

@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import { io, connectUsers } from '../../../../shared/infra/app';
+import { io, connectUsers } from '../../../../shared/infra/ws';
 import { INotificationRepository } from '../../repos/INotification';
 import { RequestDTO } from './ClearNotificationDTO';
 import { IUseCase } from '../../../../shared/domain/UseCase';
@@ -19,10 +19,12 @@ class GetCountNotificationNotReadUseCase implements IUseCase<RequestDTO, void> {
       userID,
     );
 
-    // Envia nova/atualiza quantidade de notificações novas no client
-    io.to(connectUsers[userID]).emit('count_notification_not_read', {
-      count_notification_not_read: result,
-    });
+    if (io.io) {
+      // Envia nova/atualiza quantidade de notificações novas no client
+      io.io.to(connectUsers[userID]).emit('count_notification_not_read', {
+        count_notification_not_read: result,
+      });
+    }
   }
 }
 
