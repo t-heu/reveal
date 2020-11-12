@@ -7,35 +7,19 @@ import 'express-async-errors';
 import { isCelebrate } from 'celebrate';
 import multer from 'multer';
 import { Server } from 'http';
-// import socket from 'socket.io';
 
 import './providers/MailProvider';
+
 import Socket from './ws';
 import v1Router from './http/api/v1';
 import rateLimiter from './http/middlewares/rateLimiter';
 import * as AppError from '../core/AppError';
-
-// import { ClearNotificationController } from '../../modules/notification/useCase/clearNotification';
 
 dotenv.config();
 
 const app = express();
 const server = new Server(app);
 Socket(server);
-// export const io = socket(server);
-// export const connectUsers: any = {};
-
-// io.on('connection', socket => {
-//   const { user } = socket.handshake.query;
-//   connectUsers[user] = socket.id;
-//   // console.log('PING PONG');
-//   socket.on('count_notification_not_read', data => {
-//     if (data.clear) {
-//       console.log(data, ' --- ', socket.id);
-//       ClearNotificationController.executeImpl({ userID: '' });
-//     }
-//   });
-// });
 
 // CORS
 app.use((req, res, next) => {

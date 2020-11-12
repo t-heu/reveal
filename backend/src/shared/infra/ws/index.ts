@@ -1,7 +1,7 @@
 import socket from 'socket.io';
 import { Server } from 'http';
 
-import { ClearNotificationController } from '../../../modules/notification/useCase/clearNotification';
+import { ClearNotificationController } from '../../../modules/notification/infra/ws';
 
 interface IWs {
   io?: socket.Server;
