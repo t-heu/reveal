@@ -1,18 +1,10 @@
 import handlebars from 'handlebars';
 import fs from 'fs';
 
-interface ITemplateVariables {
-  [key: string]: string | number;
-}
-
-export interface IParseMailTemplateDTO {
-  file: string;
-  variables: ITemplateVariables;
-}
-
-export interface IMailTemplateProvider {
-  parse(data: IParseMailTemplateDTO): Promise<string>;
-}
+import {
+  IMailTemplateProvider,
+  IParseMailTemplateDTO,
+} from '../dtos/IMailTemplateProviderDTO';
 
 export default class HandlebarsMailTemplateProvider
   implements IMailTemplateProvider {
