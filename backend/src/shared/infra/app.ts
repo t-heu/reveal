@@ -43,6 +43,12 @@ app.use(
   express.static(path.resolve(__dirname, '..', '..', '..', 'tmp', 'uploads')),
 );
 app.use('/api/v1', v1Router);
+app.use('*', (request, response) => {
+  return response.status(404).json({
+    status: 'error',
+    message: 'Not Found',
+  });
+});
 app.use(
   (
     err: any,

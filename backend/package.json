@@ -22,7 +22,6 @@
     "expo-server-sdk": "^3.6.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
-    "firebase": "^8.0.1",
     "handlebars": "^4.7.6",
     "helmet": "^3.23.3",
     "jimp": "^0.14.0",
