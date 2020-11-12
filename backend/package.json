@@ -1,14 +1,19 @@
 {
   "name": "reveal",
   "version": "1.0.0",
-  "description": "reveal",
+  "description": "social network reveal",
   "main": "app.js",
+  "engines": {
+    "node": "12.16.0",
+    "npm": "6.13.4",
+    "yarn": "1.22.5"
+  },
   "scripts": {
     "dev": "clear && ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/server.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node ./dist/server.js"
   },
-  "keywords": [],
+  "keywords": ["reveal", "social", "network"],
   "author": "t-heu",
   "license": "ISC",
   "dependencies": {
