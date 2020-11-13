@@ -136,6 +136,9 @@ userRouter.patch(
     [Segments.HEADERS]: Joi.object({
       authorization: Joi.string().required(),
     }).unknown(),
+    [Segments.QUERY]: {
+      filename: Joi.string().required(),
+    },
   }),
   ensureAuthenticated,
   upload,

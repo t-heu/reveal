@@ -13,7 +13,7 @@ import api from '../services/api';
 
 interface User {
   id: string;
-  photo: string;
+  profilePicture: string;
   name: string;
   email: string;
   avatar_url: string;

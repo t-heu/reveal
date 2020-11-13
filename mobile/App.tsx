@@ -76,7 +76,7 @@ export default function App() {
 
   return (
     <NavigationContainer linking={linking} /*fallback={<Loading />}*/>
-      <StatusBar style="light" backgroundColor="#111" />
+      <StatusBar style="light" backgroundColor="#000" />
       <View
         style={{
           height: Platform.OS === 'ios' ? 20 : StatusBarConfig.currentHeight,

@@ -5,10 +5,11 @@ import path from 'path';
 import crypto from 'crypto';
 import aws from 'aws-sdk';
 import multerS3 from 'multer-s3';
-// import { Storage } from '@google-cloud/storage';
+import Jimp from 'jimp';
+import fs from 'fs';
 
 import { AppError } from '../shared/core/AppError';
-// import { FirebaseStorage } from './customStorage.js';
+import { firebaseStorageEngine } from './customStorage';
 
 dotenv.config();
 
@@ -30,30 +31,42 @@ interface IUploadConfig {
   };
 }
 
-function MyCustomStorage(opts: any) {
-  console.log(opts);
-}
-
 const storageTypes = {
   disk: multer.diskStorage({
     destination: path.resolve(tmpFolder, 'uploads'),
-    filename: (req, file, cb) => {
-      crypto.randomBytes(16, (err, hash) => {
-        // @ts-ignore
-        if (err) cb(err);
+    filename: (req: any, file, cb) => {
+      // @ts-ignore
+      if (err) cb(err);
 
-        const filename = `${hash.toString('hex')}-${Date.now()}-${
-          file.originalname
-        }`;
-        return cb(null, filename);
-      });
+      const filename =
+        req.query.filename.match(/(https|http?:\/\/[^\s]+)/g) ||
+        req.query.filename === 'no_photo.jpg'
+          ? `${crypto.randomBytes(16).toString('hex')}-${Date.now()}.jpg`
+          : req.query.filename;
+
+      Jimp.read(req.file.buffer)
+        .then(lenna => {
+          return lenna
+            .resize(250, 250)
+            .quality(60)
+            .write(path.resolve(req.file.destination, filename));
+        })
+        .catch(err => {
+          console.log(err);
+          // @ts-ignore
+          cb(err);
+        });
+
+      fs.unlinkSync(req.file.path);
+
+      return cb(null, filename);
     },
   }),
 
-  firebase_storage: MyCustomStorage({
-    bucket: 'app',
-    projectId: 'app',
-    keyFilename: 'app',
+  firebase_storage: firebaseStorageEngine({
+    projectId: process.env.FIREBASE_STORAGE_PROJECT_ID as string,
+    keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS as string,
+    bucket: process.env.FIREBASE_STORAGE_BUCKET as string,
   }),
 
   s3: multerS3({
@@ -100,11 +113,4 @@ export default {
       }
     },
   },
-
-  // config: {
-  //   disk: {},
-  //   aws: {
-  //     bucket: 'app',
-  //   },
-  // },
 } as IUploadConfig;

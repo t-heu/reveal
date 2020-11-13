@@ -92,6 +92,9 @@ export default function Profile() {
 
       setProgressVisible(true);
       await api.patch('/user/avatar', dataForm, {
+        params: {
+          filename: user.profilePicture,
+        },
         headers: {
           'content-type': 'multipart/form-data',
         },
