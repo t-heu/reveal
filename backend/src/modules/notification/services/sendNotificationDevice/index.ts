@@ -1,5 +1,5 @@
-import { SendNotificationDevice } from './SendNotificationDevice';
+import { PushNotificationExpo } from './impl/pushNotificationExpo';
 
-const sendNotificationDevice = new SendNotificationDevice();
+const sendNotificationDevice = new PushNotificationExpo();
 
 export { sendNotificationDevice };

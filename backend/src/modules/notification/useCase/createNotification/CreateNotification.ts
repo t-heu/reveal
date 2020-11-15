@@ -1,4 +1,4 @@
-import { inject, injectable } from 'tsyringe';
+import { inject, injectable, delay } from 'tsyringe';
 
 import { io, connectUsers } from '../../../../shared/infra/ws';
 import { IPostRepository } from '../../../feed/repos/IPostRepo';
@@ -18,9 +18,11 @@ interface Request {
 @injectable()
 class CreateNotification implements IUseCase<Request, string> {
   constructor(
-    @inject('PostRepository')
+    // @ts-ignore
+    @inject(delay(() => 'PostRepository'))
     private postRepository: IPostRepository,
-    @inject('NotificationRepository')
+    // @ts-ignore
+    @inject(delay(() => 'NotificationRepository'))
     private notificationRepository: INotificationRepository,
   ) {}
 

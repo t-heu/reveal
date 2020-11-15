@@ -1,21 +1,12 @@
 /* eslint-disable no-restricted-syntax, no-continue, no-await-in-loop */
-
 import { Expo, ExpoPushMessage } from 'expo-server-sdk';
-import { container } from 'tsyringe';
 
-import { CreateNotification } from '../../useCase/createNotification';
+import { Request } from '../models/sendNotificationDevice';
+import { createNotification } from '../../../useCase/createNotification';
 
 const expo = new Expo();
 
-interface Request {
-  title: string;
-  body: string;
-  data: any;
-  link: string;
-  type: string;
-}
-
-class SendNotificationDevice {
+class PushNotificationExpo {
   public async execute({
     title,
     body,
@@ -28,8 +19,7 @@ class SendNotificationDevice {
     const tickets: any[] = [];
     const receiptIds: string[] = [];
 
-    const response = container.resolve(CreateNotification);
-    const token = await response.execute({
+    const token = await createNotification.execute({
       description: body,
       link,
       title,
@@ -89,4 +79,4 @@ class SendNotificationDevice {
   }
 }
 
-export { SendNotificationDevice };
+export { PushNotificationExpo };

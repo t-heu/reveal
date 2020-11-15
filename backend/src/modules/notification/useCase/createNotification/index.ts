@@ -1,3 +1,6 @@
+import { container } from 'tsyringe';
 import CreateNotification from './CreateNotification';
 
-export { CreateNotification };
+const createNotification = container.resolve(CreateNotification);
+
+export { createNotification };
