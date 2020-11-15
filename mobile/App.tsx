@@ -1,6 +1,12 @@
 import {StatusBar} from 'expo-status-bar';
 import React from 'react';
-import {View, Platform, StatusBar as StatusBarConfig} from 'react-native';
+import {
+  View,
+  Platform,
+  StatusBar as StatusBarConfig,
+  // Linking,
+  // Alert,
+} from 'react-native';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
@@ -22,11 +28,19 @@ Sentry.init({
 });
 
 const linking = {
-  prefixes: ['exp://192.168.1.5:19000/--/', 'exp://', 'reveal://'],
+  prefixes: [
+    'exp://192.168.1.5:19000/--/',
+    'exp://',
+    'reveal://',
+    'https://servebacksecretapp.herokuapp.com/',
+  ],
   config: {
     screens: {
       ResetPassword: {
-        path: 'resetpassword/:token',
+        path: 'api/v1/user/password/reset', //'resetpassword/:token', // resetpassword/:token => reveal://resetpassword/aB6dEl9
+      },
+      ConfirmEmail: {
+        path: 'api/v1/user/confirm/email',
       },
     },
   },
@@ -54,10 +68,10 @@ export default function App() {
   // useEffect(() => {
   //   (async () => {
   //     Linking.addEventListener('url', ({url}) => {
-  //       console.log(url);
+  //       Alert.alert(url);
   //     });
   //   })();
-  //}, []);
+  // }, []);
 
   //useEffect(() => {
   /*notificationListener.current = Notifications.addNotificationReceivedListener(notification => {

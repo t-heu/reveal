@@ -1,49 +1,52 @@
-import { inject, injectable } from 'tsyringe';
+import { inject, injectable, delay } from 'tsyringe';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 import { IUseCase } from '../../../../shared/domain/UseCase';
-// import * as AppError from '../../../../shared/core/AppError';
 import { IUserRepository } from '../../repos/IUserRepo';
 import { ITokensRepository } from '../../repos/ITokensRepo';
 import { IMailProvider } from '../../../../shared/infra/providers/MailProvider/dtos/IMailProviderDTO';
-import { SendForgotPasswordEmailDTO } from './SendForgotPasswordEmailDTO';
 import { UserEmail } from '../../domain/userEmail';
 import { firebaseGenerateLink } from '../../services/generateLink';
 
+interface IRequestDTO {
+  email: string;
+  type: string;
+  title: string;
+}
+
 @injectable()
-class SendForgotPasswordEmailUseCase
-  implements IUseCase<SendForgotPasswordEmailDTO, void> {
+class SendEmailVerifyUseCase implements IUseCase<IRequestDTO, void> {
   constructor(
-    @inject('UserRepository')
+    // @ts-ignore
+    @inject(delay(() => 'UserRepository'))
     private userRepository: IUserRepository,
-
-    @inject('TokensRepository')
+    // @ts-ignore
+    @inject(delay(() => 'TokensRepository'))
     private tokensRepository: ITokensRepository,
-
-    @inject('MailProvider')
+    // @ts-ignore
+    @inject(delay(() => 'MailProvider'))
     private mailProvider: IMailProvider,
   ) {}
 
-  public async execute(data: SendForgotPasswordEmailDTO): Promise<void> {
+  public async execute(data: IRequestDTO): Promise<void> {
     const email = UserEmail.create(data.email);
     const user = await this.userRepository.findUserByEmail(email);
 
-    const forgotPasswordTemplate = path.resolve(
+    const verifiedEmailTemplate = path.resolve(
       __dirname,
       '..',
       '..',
       'views',
-      'forgot_password.hbs',
+      'verified_email.hbs',
     );
 
     const generateToken = uuidv4();
-    console.log(generateToken, ' token');
 
     await this.tokensRepository.create({
       user_id: String(user.id.toValue()),
       token: generateToken,
-      type: 'forgot_password',
+      type: data.type,
     });
 
     await this.mailProvider.sendMail({
@@ -55,13 +58,13 @@ class SendForgotPasswordEmailUseCase
         name: user.name.value,
         email: user.email.value,
       },
-      subject: '[Reveal] Forgot Password',
+      subject: data.title,
       templateData: {
-        file: forgotPasswordTemplate,
+        file: verifiedEmailTemplate,
         variables: {
           name: user.name.value,
           link: await firebaseGenerateLink.generateDynamicLink(
-            `${process.env.APP_URL}/api/v1/user/password/reset?token=${generateToken}`,
+            `${process.env.APP_URL}/api/v1/user/confirm/email?token=${generateToken}`,
           ),
         },
       },
@@ -69,4 +72,4 @@ class SendForgotPasswordEmailUseCase
   }
 }
 
-export default SendForgotPasswordEmailUseCase;
+export default SendEmailVerifyUseCase;

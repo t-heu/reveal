@@ -10,11 +10,11 @@ export class VerifyEmailController extends BaseController {
   }
 
   async executeImpl(req: Request, res: Response): Promise<any> {
-    const { token } = req.body;
+    const { token } = req.query;
 
     const response = container.resolve(VerifyEmailUseCase);
-    await response.execute({ token });
+    await response.execute({ token: token as string });
 
-    return this.created(res);
+    return res.send('Confirmed!');
   }
 }

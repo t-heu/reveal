@@ -12,6 +12,7 @@ import { ResetPasswordController } from '../../../useCases/resetPassword';
 import { SendForgotPasswordEmailController } from '../../../useCases/sendForgotPasswordEmail';
 import { GetCurrentUserUserController } from '../../../useCases/getCurrentUser';
 import { RefreshAccessTokenController } from '../../../useCases/refreshAccessToken';
+import { VerifyEmailController } from '../../../useCases/verifyEmail';
 
 import cache from '../../../../../shared/infra/http/middlewares/cacheable';
 import ensureAuthenticated from '../../../../../shared/infra/http/middlewares/ensureAuthenticated';
@@ -66,6 +67,16 @@ userRouter.post(
   }),
   cache(5),
   (req, res) => RefreshAccessTokenController.executeImpl(req, res),
+);
+
+userRouter.post(
+  '/confirm/email',
+  celebrate({
+    [Segments.QUERY]: {
+      token: Joi.string().required(),
+    },
+  }),
+  (req, res) => VerifyEmailController.executeImpl(req, res),
 );
 
 userRouter.post(

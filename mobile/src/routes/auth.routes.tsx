@@ -6,6 +6,7 @@ import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
 import ForgotPassword from '../screens/ForgotPassword';
 import ResetPassword from '../screens/ResetPassword';
+import ConfirmEmail from '../screens/ConfirmEmail';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export default function AuthRoutes() {
       <Stack.Screen name="Signup" component={SignUp} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} />
+      <Stack.Screen name="ConfirmEmail" component={ConfirmEmail} />
     </Stack.Navigator>
   );
 }

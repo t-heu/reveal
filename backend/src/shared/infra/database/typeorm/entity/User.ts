@@ -5,7 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  AfterInsert,
 } from 'typeorm';
+
+import { DomainEvents } from '../../../../domain/events/DomainEvents';
+import { UniqueEntityID } from '../../../../domain/UniqueEntityID';
 
 import Post from './Post';
 import Comment from './Comment';
@@ -67,4 +71,10 @@ export default class User {
 
   @OneToMany(() => ExternalAuth, profile => profile.user)
   external_auths: ExternalAuth[];
+
+  @AfterInsert()
+  dispatchAggregateEvents(): void {
+    const aggregateId = new UniqueEntityID(this.id);
+    DomainEvents.dispatchEventsForAggregate(aggregateId);
+  }
 }

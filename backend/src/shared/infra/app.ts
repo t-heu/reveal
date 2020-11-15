@@ -8,8 +8,6 @@ import { isCelebrate } from 'celebrate';
 import multer from 'multer';
 import { Server } from 'http';
 
-import './providers/MailProvider';
-
 import Socket from './ws';
 import v1Router from './http/api/v1';
 import rateLimiter from './http/middlewares/rateLimiter';

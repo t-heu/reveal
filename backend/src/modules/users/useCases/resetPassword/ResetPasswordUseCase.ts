@@ -24,7 +24,7 @@ class ResetPasswordUseCase implements IUseCase<ResetPasswordDTO, void> {
     const userToken = await this.tokensRepository.findByToken(data.token);
     const user = await this.userRepository.findById(userToken.user_id);
 
-    if (!userToken.is_revoked) {
+    if (userToken.is_revoked) {
       throw new AppError('Token already used.');
     }
 

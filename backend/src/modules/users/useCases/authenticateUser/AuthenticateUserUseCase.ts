@@ -26,6 +26,10 @@ class AuthenticateUserUseCase
 
     const user = await this.userRepository.findUserByEmail(email);
 
+    if (!user.isEmailVerified) {
+      throw new AppError('Confirm your email to be able to login');
+    }
+
     if (!(await password.comparePassword(user.password.value))) {
       throw new AppError('invalid password');
     }

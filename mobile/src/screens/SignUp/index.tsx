@@ -48,7 +48,7 @@ export default function SignUp() {
 
       await schema.validate({email, password, name}, {abortEarly: false});
       await signup({email, password, name});
-      ToastSuccess('Full login, you can now login');
+      ToastSuccess('Your account confirmation has been sent to your email.');
       navigation.navigate('Signin');
     } catch (err) {
       if (err instanceof Yup.ValidationError) {

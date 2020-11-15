@@ -24,7 +24,7 @@ class VerifyEmailUseCase implements IUseCase<VerifyEmailDTO, void> {
       throw new AppError('Email already Verified.');
     }
 
-    if (!userToken.is_revoked) {
+    if (userToken.is_revoked) {
       throw new AppError('Token already used.');
     }
 
