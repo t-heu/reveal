@@ -16,8 +16,14 @@ export default class GmailMailProvider implements IMailProvider {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
+        type: 'OAuth2',
         user: process.env.GMAIL_MAIL_USER,
-        pass: process.env.GMAIL_MAIL_PASS,
+        // pass: process.env.GMAIL_MAIL_PASS,
+        clientId: process.env.GMAIL_MAIL_CLIENT_ID,
+        clientSecret: process.env.GMAIL_MAIL_CLIENT_SECRET,
+        refreshToken: process.env.GMAIL_MAIL_REFRESH_TOKEN,
+        accessToken: process.env.GMAIL_MAIL_ACCESS_TOKEN,
+        expires: 3599,
       },
     });
 

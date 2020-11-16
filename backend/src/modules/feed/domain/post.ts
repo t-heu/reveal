@@ -54,8 +54,8 @@ export class Post extends AggregateRoot<PostProps> {
     return this.props.has_hidePost || false;
   }
 
-  get avatarUrl(): UserPhoto {
-    return UserPhoto.create(this.props.photo);
+  get avatarUrl(): string {
+    return UserPhoto.create(this.props.photo).getUrl;
   }
 
   private constructor(props: PostProps, id?: UniqueEntityID) {

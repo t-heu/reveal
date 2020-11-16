@@ -12,7 +12,7 @@ interface UserProps {
   email: UserEmail;
   name: UserName;
   password: UserPassword;
-  photo?: string;
+  photo: UserPhoto;
   isEmailVerified?: boolean;
   accessToken?: JWTToken;
   refreshToken?: RefreshToken;
@@ -59,11 +59,11 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   get profilePicture(): string {
-    return UserPhoto.isPhotoValid(this.props.photo);
+    return this.props.photo.value;
   }
 
-  get avatarUrl(): UserPhoto {
-    return UserPhoto.create(this.props.photo);
+  get avatarUrl(): string {
+    return this.props.photo.getUrl;
   }
 
   private constructor(props: UserProps, id?: UniqueEntityID) {

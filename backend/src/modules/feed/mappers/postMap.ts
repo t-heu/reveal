@@ -17,7 +17,7 @@ class PostMap implements Mapper<Post> {
       userId: t.userId.id.toString(),
       viewer_has_hidePost: t.has_hidePost,
       user: {
-        avatar_url: t.avatarUrl.value,
+        avatar_url: t.avatarUrl,
       },
     };
   }

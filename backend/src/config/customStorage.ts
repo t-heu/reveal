@@ -81,6 +81,8 @@ export default class MulterGoogleCloudStorage implements multer.StorageEngine {
           return cb(err);
         }
 
+        if (filename === 'no_photo.jpg') return;
+
         const gcFile = this.gcsBucket.file(filename);
 
         file.stream

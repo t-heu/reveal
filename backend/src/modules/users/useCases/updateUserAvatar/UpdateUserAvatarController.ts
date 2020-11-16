@@ -12,7 +12,6 @@ export class UpdateUserAvatarController extends BaseController {
   async executeImpl(req: Request, res: Response): Promise<any> {
     try {
       const userID = req.user.id;
-      console.log(req.file.filename);
 
       const user = container.resolve(UpdateUserAvatarUseCase);
       await user.execute({

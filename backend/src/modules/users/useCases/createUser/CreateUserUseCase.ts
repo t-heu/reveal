@@ -7,6 +7,7 @@ import { CreateUserDTO } from './CreateUserDTO';
 import { User } from '../../domain/user';
 import { UserName } from '../../domain/userName';
 import { UserEmail } from '../../domain/userEmail';
+import { UserPhoto } from '../../domain/userPhoto';
 import { UserPassword } from '../../domain/userPassword';
 
 @injectable()
@@ -20,8 +21,9 @@ class CreateUserUseCase implements IUseCase<CreateUserDTO, void> {
     const name = UserName.create({ name: data.name });
     const email = UserEmail.create(data.email);
     const password = UserPassword.create({ value: data.password });
+    const photo = UserPhoto.create();
 
-    const user = User.create({ name, email, password });
+    const user = User.create({ name, email, password, photo });
 
     if (await this.userRepository.exists(email)) {
       throw new AppError(

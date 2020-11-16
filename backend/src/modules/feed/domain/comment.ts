@@ -30,8 +30,8 @@ export class Comment extends AggregateRoot<CommentProps> {
     return this.props.dateTimePosted || new Date();
   }
 
-  get avatarUrl(): UserPhoto {
-    return UserPhoto.create(this.props.photo);
+  get avatarUrl(): string {
+    return UserPhoto.create(this.props.photo).getUrl;
   }
 
   get postId(): PostId {

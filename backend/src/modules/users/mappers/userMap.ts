@@ -5,6 +5,7 @@ import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID';
 import { UserName } from '../domain/userName';
 import { UserPassword } from '../domain/userPassword';
 import { UserEmail } from '../domain/userEmail';
+import { UserPhoto } from '../domain/userPhoto';
 
 class UserMap implements Mapper<User> {
   public toDTO(t: User): IUserDTO {
@@ -15,7 +16,7 @@ class UserMap implements Mapper<User> {
       email: t.email.value,
       profilePicture: t.profilePicture,
       has_google: t.has_google,
-      avatar_url: t.avatarUrl.value,
+      avatar_url: t.avatarUrl,
     };
   }
 
@@ -26,6 +27,7 @@ class UserMap implements Mapper<User> {
       hashed: true,
     });
     const userEmailOrError = UserEmail.create(raw.email);
+    const userPhotoOrError = UserPhoto.create(raw.photo);
 
     const userOrError = User.create(
       {
@@ -33,7 +35,7 @@ class UserMap implements Mapper<User> {
         isEmailVerified: raw.enabled,
         password: userPasswordOrError,
         email: userEmailOrError,
-        photo: raw.photo,
+        photo: userPhotoOrError,
         has_google:
           raw.external_auths.filter(
             (google: any) => google.providerName === 'Google',

@@ -12,7 +12,7 @@ class CommentMap implements Mapper<Comment> {
       id: t.id.toValue().toString(),
       text: t.text.value,
       dateTimePosted: new Date(t.dateTimePosted),
-      avatar_URL: t.avatarUrl.value,
+      avatar_URL: t.avatarUrl,
       user_id: String(t.userId),
       post_id: String(t.postId),
     };

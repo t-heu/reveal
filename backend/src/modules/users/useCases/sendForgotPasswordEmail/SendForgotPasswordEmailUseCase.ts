@@ -38,7 +38,6 @@ class SendForgotPasswordEmailUseCase
     );
 
     const generateToken = uuidv4();
-    console.log(generateToken, ' token');
 
     await this.tokensRepository.create({
       user_id: String(user.id.toValue()),
