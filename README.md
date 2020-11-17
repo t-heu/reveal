@@ -20,6 +20,7 @@ Reveal is a type of social network where users are anonymous, they can share ide
 - React Native
 - MongoDB
 - EJS
+- Firebase
 
 <ul>
   <li>others:</li>

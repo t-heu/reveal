@@ -1,10 +1,10 @@
-import axios, {
-  //AxiosRequestConfig,
-  AxiosResponse,
-} from 'axios';
+import axios from 'axios'; // AxiosResponse, //AxiosRequestConfig,
 import AsyncStorage from '@react-native-community/async-storage';
 
 import Env from '../../environment';
+
+let isRefreshing = false;
+let refreshSubscribers = [] as any;
 
 const api = axios.create({
   baseURL: `${Env.API_URI}/api/v1`,
@@ -27,7 +27,7 @@ async function refreshToken(): Promise<any> {
       );
       AsyncStorage.setItem('@auth:refreshToken', refresh_token);
 
-      return Promise.resolve({access_token, token_type});
+      return Promise.resolve(access_token);
     })
     .catch(async () => {
       await AsyncStorage.multiRemove([
@@ -39,36 +39,66 @@ async function refreshToken(): Promise<any> {
     });
 }
 
+function subscribeTokenRefresh(cb: any) {
+  refreshSubscribers.push(cb);
+}
+
+function onRefreshed(token: string) {
+  refreshSubscribers.map((cb: any) => cb(token));
+}
+
 api.interceptors.response.use(
-  async (config: AxiosResponse): Promise<AxiosResponse> => {
-    return config;
+  (response) => {
+    return response;
   },
-  async function (error) {
-    if (error.response.status === 401) {
-      console.log(error.response.status);
+  (error) => {
+    const {
+      config,
+      response: {status},
+    } = error;
+    const originalRequest = config;
 
-      const {token_type, access_token} = await refreshToken();
+    if (status === 401) {
+      if (!isRefreshing) {
+        isRefreshing = true;
+        refreshToken().then((newToken) => {
+          isRefreshing = false;
+          onRefreshed(newToken);
+        });
+      }
 
-      // Retry request
-      error.config.headers.authorization = `${token_type} ${access_token}`;
-      return await api.request(error.config);
+      const retryOrigReq = new Promise((resolve) => {
+        subscribeTokenRefresh((token: string) => {
+          // replace the expired token and retry request
+          originalRequest.headers.Authorization = 'Bearer ' + token;
+          resolve(axios(originalRequest));
+          refreshSubscribers = [];
+        });
+      });
+      return retryOrigReq;
+    } else {
+      return Promise.reject(error);
     }
-    console.log(error.response.status);
-
-    return Promise.reject(error);
   },
 );
 
-// api.interceptors.request.use(
-//   async (config: AxiosRequestConfig): Promise<AxiosRequestConfig | any> => {
-//     const accessToken = await AsyncStorage.getItem('@auth:accessToken');
-
-//     if (accessToken) {
-//       const {token_type, access_token} = JSON.parse(accessToken);
-//       config.headers.authorization = `${token_type} ${access_token}`;
-//     }
-
+// api.interceptors.response.use(
+//   async (config: AxiosResponse): Promise<AxiosResponse> => {
 //     return config;
+//   },
+//   async function (error) {
+//     if (error.response.status === 401) {
+//       console.log(error.response.status);
+
+//       const {token_type, access_token} = await refreshToken();
+
+//       // Retry request
+//       error.config.headers.authorization = `${token_type} ${access_token}`;
+//       return await api.request(error.config);
+//     }
+//     console.log(error.response.status);
+
+//     return Promise.reject(error);
 //   },
 // );
 

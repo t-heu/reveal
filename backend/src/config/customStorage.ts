@@ -18,14 +18,13 @@ export default class MulterGoogleCloudStorage implements multer.StorageEngine {
   private streamOpts: any;
 
   getFilename(req: any, file: Express.Multer.File, cb: any): void {
-    if (
+    cb(
+      null,
       req.query.filename.match(/(https|http?:\/\/[^\s]+)/g) ||
-      req.query.filename === 'no_photo.jpg'
-    ) {
-      cb(null, `${crypto.randomBytes(16).toString('hex')}-${Date.now()}.jpg`);
-    }
-
-    cb(null, req.query.filename);
+        req.query.filename === 'no_photo.jpg'
+        ? `${crypto.randomBytes(16).toString('hex')}-${Date.now()}.jpg`
+        : req.query.filename,
+    );
   }
 
   getDestination(
@@ -80,8 +79,6 @@ export default class MulterGoogleCloudStorage implements multer.StorageEngine {
         if (err) {
           return cb(err);
         }
-
-        if (filename === 'no_photo.jpg') return;
 
         const gcFile = this.gcsBucket.file(filename);
 
