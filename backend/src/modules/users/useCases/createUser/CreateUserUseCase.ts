@@ -10,6 +10,8 @@ import { UserEmail } from '../../domain/userEmail';
 import { UserPhoto } from '../../domain/userPhoto';
 import { UserPassword } from '../../domain/userPassword';
 
+import { UploadStorage } from '../../../../config/uploadStorage';
+
 @injectable()
 class CreateUserUseCase implements IUseCase<CreateUserDTO, void> {
   constructor(
@@ -21,7 +23,9 @@ class CreateUserUseCase implements IUseCase<CreateUserDTO, void> {
     const name = UserName.create({ name: data.name });
     const email = UserEmail.create(data.email);
     const password = UserPassword.create({ value: data.password });
-    const photo = UserPhoto.create();
+
+    const uploadStorage = new UploadStorage();
+    const photo = UserPhoto.create(uploadStorage.storage());
 
     const user = User.create({ name, email, password, photo });
 

@@ -6,14 +6,14 @@ import crypto from 'crypto';
 import aws from 'aws-sdk';
 import multerS3 from 'multer-s3';
 import Jimp from 'jimp';
-import fs from 'fs';
+// import fs from 'fs';
 
 import { AppError } from '../shared/core/AppError';
 import { firebaseStorageEngine } from './customStorage';
 
 dotenv.config();
 
-const tmpFolder = path.join(__dirname, '..', '..', 'tmp');
+export const tmpFolder = path.join(__dirname, '..', '..', 'tmp', 'uploads');
 
 interface IUploadConfig {
   driver: 's3' | 'disk' | 'firebase_storage';
@@ -33,23 +33,19 @@ interface IUploadConfig {
 
 const storageTypes = {
   disk: multer.diskStorage({
-    destination: path.resolve(tmpFolder, 'uploads'),
-    filename: (req: any, file, cb) => {
-      // @ts-ignore
-      if (err) cb(err);
+    destination: tmpFolder,
+    filename: (req: any, file, cb: any) => {
+      console.log(file);
 
-      const filename =
-        req.query.filename.match(/(https|http?:\/\/[^\s]+)/g) ||
-        req.query.filename === 'no_photo.jpg'
-          ? `${crypto.randomBytes(16).toString('hex')}-${Date.now()}.jpg`
-          : req.query.filename;
+      if (req.query.filename === 'no_photo.jpg')
+        return cb(new AppError('incorrect image format'));
 
-      Jimp.read(req.file.buffer)
+      Jimp.read(path.resolve(tmpFolder, req.query.filename))
         .then(lenna => {
           return lenna
             .resize(250, 250)
             .quality(60)
-            .write(path.resolve(req.file.destination, filename));
+            .write(path.resolve(tmpFolder, req.query.filename));
         })
         .catch(err => {
           console.log(err);
@@ -57,9 +53,9 @@ const storageTypes = {
           cb(err);
         });
 
-      fs.unlinkSync(req.file.path);
+      // fs.unlinkSync(req.file.path);
 
-      return cb(null, filename);
+      return cb(null, req.query.filename);
     },
   }),
 
@@ -87,7 +83,7 @@ const storageTypes = {
   }),
 };
 
-enum Storage_Types {
+export enum Storage_Types {
   s3 = 's3',
   disk = 'disk',
   firebase_storage = 'firebase_storage',

@@ -2,7 +2,6 @@
 
 import * as multer from 'multer';
 import { Storage, Bucket } from '@google-cloud/storage';
-import crypto from 'crypto';
 
 interface ICred {
   keyFilename: string;
@@ -18,13 +17,7 @@ export default class MulterGoogleCloudStorage implements multer.StorageEngine {
   private streamOpts: any;
 
   getFilename(req: any, file: Express.Multer.File, cb: any): void {
-    cb(
-      null,
-      req.query.filename.match(/(https|http?:\/\/[^\s]+)/g) ||
-        req.query.filename === 'no_photo.jpg'
-        ? `${crypto.randomBytes(16).toString('hex')}-${Date.now()}.jpg`
-        : req.query.filename,
-    );
+    cb(null, req.query.filename);
   }
 
   getDestination(

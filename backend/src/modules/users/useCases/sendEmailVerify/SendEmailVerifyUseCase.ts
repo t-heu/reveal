@@ -51,7 +51,7 @@ class SendEmailVerifyUseCase implements IUseCase<IRequestDTO, void> {
 
     await this.mailProvider.sendMail({
       from: {
-        name: 'Team Reveal',
+        name: 'Reveal',
         email: 'contact@reveal.com',
       },
       to: {

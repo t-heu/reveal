@@ -47,14 +47,14 @@ class SendForgotPasswordEmailUseCase
 
     await this.mailProvider.sendMail({
       from: {
-        name: 'Team Reveal',
+        name: 'Reveal',
         email: 'contact@reveal.com',
       },
       to: {
         name: user.name.value,
         email: user.email.value,
       },
-      subject: '[Reveal] Forgot Password',
+      subject: 'Reveal Forgot Password',
       templateData: {
         file: forgotPasswordTemplate,
         variables: {
