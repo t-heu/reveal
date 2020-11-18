@@ -16,10 +16,11 @@ export class UploadStorage {
   }
 
   storage(filename?: string): string {
-    this.filename =
+    const fileName =
       filename || `${crypto.randomBytes(16).toString('hex')}-${Date.now()}.jpg`;
+    this.filename = fileName;
     this[process.env.STORAGE_DRIVER as Storage_Types]();
-    return filename as string;
+    return fileName;
   }
 
   s3(): void {
@@ -36,6 +37,8 @@ export class UploadStorage {
       process.env.FIREBASE_STORAGE_BUCKET as string,
     );
     const gcFile = gcsBucket.file(this.filename);
+
+    if (this.filename === 'no_photo.jpg') return;
 
     fs.readFile(path.resolve(this.file, 'no_photo.jpg'), (err, data) => {
       if (err) throw err;
