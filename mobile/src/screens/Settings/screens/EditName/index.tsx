@@ -52,7 +52,7 @@ export default function EditName() {
 
   return (
     <Formik
-      initialValues={{name: ''}}
+      initialValues={{name: user.name ? user.name : ''}}
       onSubmit={(values) => handleSubmitName(values)}>
       {({handleChange, handleSubmit, values}) => (
         <KeyboardAvoidingView
@@ -81,7 +81,7 @@ export default function EditName() {
                     style={stylesEditsPages.input}
                     placeholder="fulano"
                     keyboardType="default"
-                    value={user.name ? user.name : values.name}
+                    value={values.name}
                     onChangeText={handleChange('name')}
                     placeholderTextColor="#888"
                     autoCorrect
