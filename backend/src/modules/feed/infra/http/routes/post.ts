@@ -53,6 +53,7 @@ postRouter.get(
     }).unknown(),
     [Segments.QUERY]: {
       description: Joi.string().required(),
+      page: Joi.number().required(),
     },
   }),
   ensureAuthenticated,

@@ -26,6 +26,7 @@ export default function NotificationModal({reload}: any) {
     if (!reload && data.length > 0) {
       return;
     }
+
     try {
       const response = await api.get('/notification');
 
@@ -38,11 +39,11 @@ export default function NotificationModal({reload}: any) {
   }, [reload, data]);
 
   useEffect(() => {
-    if (!mount) {
+    if (!mount && visibleModalNotification) {
       feedLoad();
       setMount(!mount);
     }
-  }, [feedLoad, mount]);
+  }, [feedLoad, mount, visibleModalNotification]);
 
   async function handleLoadMore() {
     setRefreshing(true);

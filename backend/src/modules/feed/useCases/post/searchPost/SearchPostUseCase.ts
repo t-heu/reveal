@@ -14,9 +14,11 @@ class SearchPostUseCase implements IUseCase<SearchPostDTO, ResponseDTO> {
   public async execute({
     description,
     userID,
+    page,
   }: SearchPostDTO): Promise<ResponseDTO> {
     const { result, total } = await this.postRepository.getAllPostSearch({
       search: description,
+      skip: page,
       userID,
     });
 

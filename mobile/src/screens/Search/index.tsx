@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {TouchableOpacity, FlatList, View, TextInput} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import {Formik} from 'formik';
@@ -12,37 +12,59 @@ import {styles} from './styles';
 
 interface ISearch {
   search: string;
+  shouldRefresh?: boolean;
+  pageNumber?: number;
 }
 
 export default function Search() {
   const [data, setData] = useState([] as any);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [searchSave, setSearchSave] = useState('');
 
-  async function handleSubmitSearch({search}: ISearch) {
-    try {
-      setLoading(true);
+  const handleSubmitSearch = useCallback(
+    async ({search, shouldRefresh = false, pageNumber = page}: ISearch) => {
+      try {
+        if (total && pageNumber > Number(total)) {
+          return;
+        }
 
-      const response = await api.get('/feed/post/search', {
-        params: {
-          description: search,
-        },
-      });
+        setLoading(true);
+        setSearchSave(search);
 
-      setData(response.data);
-      setLoading(false);
-    } catch (error) {
-      ToastErrors('Loading failed');
-      return;
-    }
-  }
+        const response = await api.get('/feed/post/search', {
+          params: {
+            page: pageNumber,
+            description: search,
+          },
+        });
+
+        setData(shouldRefresh ? response.data : [...data, ...response.data]);
+        setTotal(response.headers['x-total-count']);
+        setPage(page + 10);
+        setLoading(false);
+      } catch (error) {
+        ToastErrors('Loading failed');
+        return;
+      }
+    },
+    [total, page, data],
+  );
 
   return (
     <View style={stylesContainerPosts.container}>
       <Formik
         initialValues={{search: ''}}
-        onSubmit={(values) => handleSubmitSearch(values)}>
+        onSubmit={(values) =>
+          handleSubmitSearch({
+            search: values.search,
+            shouldRefresh: true,
+            pageNumber: 0,
+          })
+        }>
         {({handleChange, handleSubmit, values}) => (
-          <View style={{padding: 15, width: '100%'}}>
+          <View style={{padding: 12, width: '100%'}}>
             <View style={styles.header}>
               <TouchableOpacity
                 style={{marginRight: 12}}
@@ -67,6 +89,7 @@ export default function Search() {
       <FlatList
         style={stylesContainerPosts.posts}
         onEndReachedThreshold={0.3}
+        onEndReached={() => handleSubmitSearch({search: searchSave})}
         keyExtractor={(item) => String(item.id)}
         data={data}
         horizontal={false}

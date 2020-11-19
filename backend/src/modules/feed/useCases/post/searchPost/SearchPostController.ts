@@ -11,12 +11,13 @@ export class SearchPostController extends BaseController {
   }
 
   async executeImpl(req: Request, res: Response): Promise<any> {
-    const { description } = req.query;
+    const { description, page = 1 } = req.query;
     const userID = req.user.id;
 
     const post = container.resolve(SearchPostUseCase);
     const result = await post.execute({
       userID,
+      page: Number(page),
       description: description as string,
     });
 
