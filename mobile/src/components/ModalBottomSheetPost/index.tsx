@@ -79,7 +79,7 @@ export default function ModalBottomSheetPost() {
                 paddingTop: 5,
                 paddingBottom: 5,
               }}>
-              <Text style={styles.textModal}>Hide post</Text>
+              <Text style={styles.textModal}>Hide/Show post</Text>
             </TouchableOpacity>
           </>
         )}

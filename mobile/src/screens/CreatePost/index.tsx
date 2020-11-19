@@ -23,7 +23,10 @@ interface ICreatePost {
 export default function CreatePost() {
   const navigation = useNavigation();
 
-  async function handleSubmitCreatePost({description}: ICreatePost) {
+  async function handleSubmitCreatePost(
+    {description}: ICreatePost,
+    {resetForm}: any,
+  ) {
     try {
       const schema = Yup.object().shape({
         description: Yup.string()
@@ -48,13 +51,13 @@ export default function CreatePost() {
       }
 
       ToastErrors('Something went wrong');
+    } finally {
+      resetForm({});
     }
   }
 
   return (
-    <Formik
-      initialValues={{description: ''}}
-      onSubmit={(values) => handleSubmitCreatePost(values)}>
+    <Formik initialValues={{description: ''}} onSubmit={handleSubmitCreatePost}>
       {({handleChange, handleSubmit, values}) => (
         <View style={styles.container}>
           <View style={styles.header}>

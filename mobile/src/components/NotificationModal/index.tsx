@@ -39,11 +39,11 @@ export default function NotificationModal({reload}: any) {
   }, [reload, data]);
 
   useEffect(() => {
-    if (!mount && visibleModalNotification) {
+    if (!mount) {
       feedLoad();
       setMount(!mount);
     }
-  }, [feedLoad, mount, visibleModalNotification]);
+  }, [feedLoad, mount]);
 
   async function handleLoadMore() {
     setRefreshing(true);

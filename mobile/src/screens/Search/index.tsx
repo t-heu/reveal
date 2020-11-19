@@ -2,7 +2,9 @@ import React, {useState, useCallback} from 'react';
 import {TouchableOpacity, FlatList, View, TextInput} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import {Formik} from 'formik';
+import * as Yup from 'yup';
 
+import getValidationErrors from '../../utils/getValidationErrors';
 import {ToastErrors} from '../../utils/tryToasts';
 import {colors, stylesContainerPosts} from '../../styles';
 import api from '../../services/api';
@@ -26,6 +28,12 @@ export default function Search() {
   const handleSubmitSearch = useCallback(
     async ({search, shouldRefresh = false, pageNumber = page}: ISearch) => {
       try {
+        const schema = Yup.object().shape({
+          search: Yup.string().required('Search required').min(3).max(50),
+        });
+
+        await schema.validate({search}, {abortEarly: false});
+
         if (total && pageNumber > Number(total)) {
           return;
         }
@@ -44,7 +52,14 @@ export default function Search() {
         setTotal(response.headers['x-total-count']);
         setPage(page + 10);
         setLoading(false);
-      } catch (error) {
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          ToastErrors(errors.description);
+          return;
+        }
+
         ToastErrors('Loading failed');
         return;
       }

@@ -14,7 +14,7 @@ import * as Yup from 'yup';
 import {Formik} from 'formik';
 
 import {useAuth} from '../../../../hooks/auth';
-import {ToastErrors} from '../../../../utils/tryToasts';
+import {ToastErrors, ToastSuccess} from '../../../../utils/tryToasts';
 import {stylesEditsPages} from '../../styles';
 import getValidationErrors from '../../../../utils/getValidationErrors';
 import api from '../../../../services/api';
@@ -38,11 +38,11 @@ export default function EditPassword() {
   }: IEditPassword) {
     try {
       const schema = Yup.object().shape({
-        newPassword: Yup.string().required('Password required').min(6),
         oldPassword: Yup.string().required('Old Password required').min(6),
+        newPassword: Yup.string().required('Password required').min(6),
         confirmPassword: Yup.string()
           .min(6)
-          .oneOf([Yup.ref('password'), undefined], 'Passwords must match'),
+          .oneOf([Yup.ref('newPassword'), undefined], 'Passwords must match'),
       });
 
       await schema.validate(
@@ -51,6 +51,7 @@ export default function EditPassword() {
       );
 
       await api.put('/user/password', {newPassword, oldPassword});
+      ToastSuccess('Changed');
       await signout();
     } catch (err) {
       if (err instanceof Yup.ValidationError) {

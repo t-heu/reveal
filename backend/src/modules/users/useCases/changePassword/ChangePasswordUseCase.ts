@@ -26,7 +26,7 @@ class ChangePasswordUseCase implements IUseCase<ChangePasswordDTO, void> {
     if (data.newPassword && data.oldPassword) {
       const currentPassword = UserPassword.create({
         value: data.newPassword,
-        hashed: true,
+        hashed: false,
       });
       const oldPassword = UserPassword.create({
         value: data.oldPassword,

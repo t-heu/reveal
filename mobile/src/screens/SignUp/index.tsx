@@ -70,9 +70,9 @@ export default function SignUp() {
   return (
     <>
       {confirmEmail ? (
-        <View style={styles.container}>
+        <View style={[styles.container, {justifyContent: 'center'}]}>
           <Text style={styles.title}>Wait...</Text>
-          <Text style={styles.title}>
+          <Text style={[styles.title, {textAlign: 'center'}]}>
             Your account confirmation has been sent to your email.
           </Text>
         </View>
