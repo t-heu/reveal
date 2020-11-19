@@ -34,6 +34,7 @@ export default function SignUp() {
   const passwordInputRef = useRef<TextInput | any>(null);
   const [showPassword, setShowPassword] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [confirmEmail, setConfirmEmail] = useState(false);
 
   async function handleSubmitSignUp({email, password, name}: ISignUp) {
     try {
@@ -49,7 +50,7 @@ export default function SignUp() {
       await schema.validate({email, password, name}, {abortEarly: false});
       await signup({email, password, name});
       ToastSuccess('Your account confirmation has been sent to your email.');
-      navigation.navigate('Signin');
+      setConfirmEmail(true);
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const errors = getValidationErrors(err);
@@ -67,108 +68,121 @@ export default function SignUp() {
   }
 
   return (
-    <Formik
-      initialValues={{email: '', password: '', name: ''}}
-      onSubmit={(values) => handleSubmitSignUp(values)}>
-      {({handleChange, handleSubmit, values}) => (
-        <>
-          <KeyboardAvoidingView
-            style={{flex: 1, backgroundColor: colors.backgroundColor}}
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            enabled>
-            <ScrollView keyboardShouldPersistTaps="handled">
-              <View style={styles.container}>
-                <View>
-                  <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                      <AntDesign
-                        name="arrowleft"
-                        size={24}
-                        color={colors.primaryColor}
+    <>
+      {confirmEmail ? (
+        <View style={styles.container}>
+          <Text style={styles.title}>Wait...</Text>
+          <Text style={styles.title}>
+            Your account confirmation has been sent to your email.
+          </Text>
+        </View>
+      ) : (
+        <Formik
+          initialValues={{email: '', password: '', name: ''}}
+          onSubmit={(values) => handleSubmitSignUp(values)}>
+          {({handleChange, handleSubmit, values}) => (
+            <>
+              <KeyboardAvoidingView
+                style={{flex: 1, backgroundColor: colors.backgroundColor}}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                enabled>
+                <ScrollView keyboardShouldPersistTaps="handled">
+                  <View style={styles.container}>
+                    <View>
+                      <View style={styles.header}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                          <AntDesign
+                            name="arrowleft"
+                            size={24}
+                            color={colors.primaryColor}
+                          />
+                        </TouchableOpacity>
+                      </View>
+
+                      <Text style={styles.title}>Create Account</Text>
+                      <View style={styles.loginSocial}>
+                        <ButtonGoogle />
+                        <Text style={{color: '#fff', marginTop: 10}}>Or</Text>
+                      </View>
+
+                      <TextInput
+                        style={[styles.input, styles.inputEmail]}
+                        autoCompleteType="email"
+                        placeholder="e-mail"
+                        keyboardType="email-address"
+                        returnKeyType="next"
+                        value={values.email}
+                        onChangeText={handleChange('email')}
+                        placeholderTextColor="#888"
+                        autoCorrect
+                        onSubmitEditing={() => nameInputRef.current?.focus()}
                       />
-                    </TouchableOpacity>
-                  </View>
 
-                  <Text style={styles.title}>Create Account</Text>
-                  <View style={styles.loginSocial}>
-                    <ButtonGoogle />
-                    <Text style={{color: '#fff', marginTop: 10}}>Or</Text>
-                  </View>
+                      <TextInput
+                        style={[styles.input, styles.inputName]}
+                        ref={nameInputRef}
+                        autoCapitalize="none"
+                        autoCompleteType="name"
+                        placeholder="name"
+                        keyboardType="default"
+                        returnKeyType="next"
+                        value={values.name}
+                        onChangeText={handleChange('name')}
+                        placeholderTextColor="#888"
+                        autoCorrect={false}
+                        onSubmitEditing={() =>
+                          passwordInputRef.current?.focus()
+                        }
+                      />
 
-                  <TextInput
-                    style={[styles.input, styles.inputEmail]}
-                    autoCompleteType="email"
-                    placeholder="e-mail"
-                    keyboardType="email-address"
-                    returnKeyType="next"
-                    value={values.email}
-                    onChangeText={handleChange('email')}
-                    placeholderTextColor="#888"
-                    autoCorrect
-                    onSubmitEditing={() => nameInputRef.current?.focus()}
-                  />
-
-                  <TextInput
-                    style={[styles.input, styles.inputName]}
-                    ref={nameInputRef}
-                    autoCapitalize="none"
-                    autoCompleteType="name"
-                    placeholder="name"
-                    keyboardType="default"
-                    returnKeyType="next"
-                    value={values.name}
-                    onChangeText={handleChange('name')}
-                    placeholderTextColor="#888"
-                    autoCorrect={false}
-                    onSubmitEditing={() => passwordInputRef.current?.focus()}
-                  />
-
-                  <View style={styles.inputPassword}>
-                    <TextInput
-                      style={[styles.input, styles.fieldPassword]}
-                      ref={passwordInputRef}
-                      autoCompleteType="password"
-                      placeholder="password"
-                      secureTextEntry={showPassword}
-                      value={values.password}
-                      onChangeText={handleChange('password')}
-                      placeholderTextColor="#888"
-                      autoCorrect
-                    />
-
-                    <TouchableOpacity
-                      onPress={() => setShowPassword(!showPassword)}>
-                      {showPassword ? (
-                        <Ionicons
-                          name="md-eye"
-                          size={18}
-                          color={'#ccc'}
-                          style={{marginRight: 12}}
+                      <View style={styles.inputPassword}>
+                        <TextInput
+                          style={[styles.input, styles.fieldPassword]}
+                          ref={passwordInputRef}
+                          autoCompleteType="password"
+                          placeholder="password"
+                          secureTextEntry={showPassword}
+                          value={values.password}
+                          onChangeText={handleChange('password')}
+                          placeholderTextColor="#888"
+                          autoCorrect
                         />
-                      ) : (
-                        <Ionicons
-                          name="md-eye-off"
-                          size={18}
-                          color={'#ccc'}
-                          style={{marginRight: 12}}
-                        />
-                      )}
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            </ScrollView>
-          </KeyboardAvoidingView>
 
-          <Button
-            handleSubmit={handleSubmit}
-            loading={loading}
-            cond={values.email && values.password && values.name}
-            text="SUBMIT"
-            style={{height: 55}}
-          />
-        </>
+                        <TouchableOpacity
+                          onPress={() => setShowPassword(!showPassword)}>
+                          {showPassword ? (
+                            <Ionicons
+                              name="md-eye"
+                              size={18}
+                              color={'#ccc'}
+                              style={{marginRight: 12}}
+                            />
+                          ) : (
+                            <Ionicons
+                              name="md-eye-off"
+                              size={18}
+                              color={'#ccc'}
+                              style={{marginRight: 12}}
+                            />
+                          )}
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </ScrollView>
+              </KeyboardAvoidingView>
+
+              <Button
+                handleSubmit={handleSubmit}
+                loading={loading}
+                cond={values.email && values.password && values.name}
+                text="SUBMIT"
+                style={{height: 55}}
+              />
+            </>
+          )}
+        </Formik>
       )}
-    </Formik>
+    </>
   );
 }
