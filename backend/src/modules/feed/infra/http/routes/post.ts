@@ -52,7 +52,7 @@ postRouter.get(
       authorization: Joi.string().required(),
     }).unknown(),
     [Segments.QUERY]: {
-      description: Joi.string().required(),
+      q: Joi.string().required(),
       page: Joi.number().required(),
     },
   }),

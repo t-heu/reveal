@@ -1,7 +1,7 @@
 import { Post } from '../../../domain/post';
 
 export interface SearchPostDTO {
-  description: string;
+  search: string;
   userID: string;
   page: number;
 }

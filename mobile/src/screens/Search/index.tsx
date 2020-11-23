@@ -44,7 +44,7 @@ export default function Search() {
         const response = await api.get('/feed/post/search', {
           params: {
             page: pageNumber,
-            description: search,
+            q: search,
           },
         });
 
@@ -56,7 +56,7 @@ export default function Search() {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
 
-          ToastErrors(errors.description);
+          ToastErrors(errors.search);
           return;
         }
 
