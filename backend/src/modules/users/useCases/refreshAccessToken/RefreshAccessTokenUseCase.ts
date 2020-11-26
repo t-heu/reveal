@@ -33,9 +33,9 @@ class RefreshAccessTokenUseCase implements IUseCase<RequestDTO, ResponseDTO> {
 
     const tokenCreatedAt = userToken.createdAt;
     const compareDate = addDays(tokenCreatedAt, 7);
-    const dateNow = new Date();
-    // 2020-11-26T17:50:04.311Z | 2020-12-03T16:52:29.843Z
-    if (isAfter(dateNow, compareDate)) {
+    const dateAge = new Date();
+
+    if (isAfter(dateAge, compareDate)) {
       throw new AppError('Token expired.');
     }
 
@@ -45,24 +45,17 @@ class RefreshAccessTokenUseCase implements IUseCase<RequestDTO, ResponseDTO> {
       userId: user.id.toValue().toString(),
     });
 
-    const sixDateNow = new Date();
-    if (isAfter(sixDateNow, compareDate)) {
+    const addSixDate = addDays(tokenCreatedAt, 6);
+    if (isAfter(dateAge, addSixDate)) {
       const refresh_token_age = Jwt.generateRefreshToken();
       user.setAcessToken(access_token, refresh_token_age);
-
-      return {
-        access_token,
-        refresh_token: refresh_token_age,
-        token_type: 'bearer',
-        expires: 300,
-      };
     }
 
     user.setAcessToken(access_token, data.refresh_token);
 
     return {
       access_token,
-      refresh_token: data.refresh_token,
+      refresh_token: user.refreshToken,
       token_type: 'bearer',
       expires: 300,
     };

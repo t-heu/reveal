@@ -11,7 +11,7 @@ export default function ModalBottomSheetPost() {
 
   async function handleSubmitDelete(id: string) {
     try {
-      await api.post(`/feed/post/${id}`);
+      await api.delete(`/feed/post/${id}`);
       ToastSuccess('post deleted successfully');
       refRBSheet.current.close();
     } catch (err) {

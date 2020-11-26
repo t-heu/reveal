@@ -54,6 +54,10 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.accessToken || '';
   }
 
+  get refreshToken(): string {
+    return this.props.refreshToken || '';
+  }
+
   get lastLogin(): Date {
     return this.props.lastLogin || new Date();
   }
