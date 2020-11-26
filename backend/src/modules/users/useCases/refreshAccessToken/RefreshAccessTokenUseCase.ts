@@ -1,5 +1,5 @@
 import { inject, injectable } from 'tsyringe';
-import { isAfter, addHours, addDays } from 'date-fns';
+import { isAfter, addDays } from 'date-fns';
 
 import { IUseCase } from '../../../../shared/domain/UseCase';
 import { IUserRepository } from '../../repos/IUserRepo';
@@ -32,9 +32,9 @@ class RefreshAccessTokenUseCase implements IUseCase<RequestDTO, ResponseDTO> {
     }
 
     const tokenCreatedAt = userToken.createdAt;
-    const compareDate = addHours(tokenCreatedAt, 1);
-    const dateNow = addDays(Date.now(), 7);
-
+    const compareDate = addDays(tokenCreatedAt, 7);
+    const dateNow = new Date();
+    // 2020-11-26T17:50:04.311Z | 2020-12-03T16:52:29.843Z
     if (isAfter(dateNow, compareDate)) {
       throw new AppError('Token expired.');
     }
@@ -45,7 +45,7 @@ class RefreshAccessTokenUseCase implements IUseCase<RequestDTO, ResponseDTO> {
       userId: user.id.toValue().toString(),
     });
 
-    const sixDateNow = addDays(Date.now(), 7);
+    const sixDateNow = new Date();
     if (isAfter(sixDateNow, compareDate)) {
       const refresh_token_age = Jwt.generateRefreshToken();
       user.setAcessToken(access_token, refresh_token_age);
