@@ -74,18 +74,20 @@ export default function Profile() {
     setRefreshing(false);
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(photoUrl: string) {
     try {
       const obj = {} as any;
 
-      if (!photo) {
+      if (!photoUrl) {
         return;
       }
 
-      let filename = photo.split('/');
+      setPhoto(photoUrl);
+
+      let filename = photoUrl.split('/');
       obj.name = filename[filename.length - 1];
       obj.type = 'image/png';
-      obj.uri = photo;
+      obj.uri = photoUrl;
 
       const dataForm = new FormData();
       dataForm.append('photo', obj);
@@ -130,7 +132,7 @@ export default function Profile() {
       });
 
       if (!result.cancelled) {
-        setPhoto(String(result.uri));
+        handleSubmit(String(result.uri));
       }
     }
   }
@@ -156,15 +158,6 @@ export default function Profile() {
             }}
           />
         </TouchableOpacity>
-
-        {photo && (
-          <TouchableOpacity
-            style={{padding: 10}}
-            disabled={progressVisible}
-            onPress={() => handleSubmit()}>
-            <Feather name="send" color="#fff" size={20} />
-          </TouchableOpacity>
-        )}
       </View>
 
       {progressVisible && (
