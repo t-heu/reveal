@@ -4,11 +4,9 @@ orbs:
   heroku: circleci/heroku@0.0.10
 jobs:
   deploy_backend:
-    executor: default
     steps:
       - checkout
       - run: cd backend
-
 workflows:
   heroku_deploy:
     jobs:
