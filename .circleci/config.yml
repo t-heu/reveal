@@ -10,8 +10,8 @@ executors:
 jobs:
   deploy_backend:
     executor: default
-      steps:
-        - run: cd backend
+    steps:
+      - run: cd backend
 workflows:
   heroku_deploy:
     jobs:
