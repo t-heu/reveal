@@ -3,8 +3,8 @@ orbs:
   node: circleci/node@3.0.0
   heroku: circleci/heroku@0.0.10
 workflows:
+  working_directory: ~/backend
   heroku_deploy:
-    working_directory: ~/backend
     jobs:
       # - deploy_backend
       - heroku/deploy-via-git
