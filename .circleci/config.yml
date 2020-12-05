@@ -8,5 +8,6 @@ workflows:
       - steps:
           - run: 
               name: Entry backend
-              command: cd backend
+              command: |- 
+                cd backend
       - heroku/deploy-via-git
