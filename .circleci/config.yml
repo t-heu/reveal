@@ -5,5 +5,5 @@ orbs:
 workflows:
   heroku_deploy:
     jobs:
-      - ~/backend
+      - cd backend
       - heroku/deploy-via-git
