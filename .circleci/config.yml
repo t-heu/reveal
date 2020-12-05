@@ -3,7 +3,7 @@ orbs:
   node: circleci/node@3.0.0
   heroku: circleci/heroku@0.0.10
 deployment:
-  staging:
+  production:
     branch: master
     commands:
     - cd/backend
