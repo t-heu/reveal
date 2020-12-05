@@ -4,7 +4,9 @@ orbs:
   heroku: circleci/heroku@0.0.10
 jobs:
   build:
-    - working_directory: ~/backend
+    working_directory: ~/backend
+    steps:
+      - checkout
 workflows:
   heroku_deploy:
     jobs:
