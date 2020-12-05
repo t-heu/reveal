@@ -6,5 +6,7 @@ workflows:
   heroku_deploy:
     jobs:
       - steps:
-          run: cd backend
+          - run: 
+            name: entry backend
+            command: cd backend
       - heroku/deploy-via-git
