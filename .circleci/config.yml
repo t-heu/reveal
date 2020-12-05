@@ -2,9 +2,6 @@ version: 2.1
 orbs:
   node: circleci/node@3.0.0
   heroku: circleci/heroku@0.0.10
-executors:
-  default:
-    working_directory: ~/backend
 deployment:
   production:
     branch: master
@@ -13,4 +10,5 @@ deployment:
 workflows:
   heroku_deploy:
     jobs:
+      - working_directory: ~/backend
       - heroku/deploy-via-git
