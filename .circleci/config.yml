@@ -11,7 +11,7 @@ jobs:
   deploy_backend:
     executor: default
     steps:
-      - run: cd backend
+      - run: echo okay
 workflows:
   heroku_deploy:
     jobs:
