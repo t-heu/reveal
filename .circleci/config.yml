@@ -6,12 +6,12 @@ executors:
   default:
     docker:
      - image: circleci/node:12
-    working_directory: ~/backend
+    working_directory: ~/project
 jobs:
   deploy_backend:
     executor: default
     steps:
-      - run: echo okay
+      - run: cd backend
 workflows:
   heroku_deploy:
     jobs:
