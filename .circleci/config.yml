@@ -7,8 +7,8 @@ deployment:
     branch: master
     commands:
     - cd/backend
-    - git remote add heroku git@heroku.com:servebacksecretapp.git
-    - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
+    - heroku git:clone -a servebacksecretapp
+    - cd servebacksecretapp
 workflows:
   heroku_deploy:
     jobs:
