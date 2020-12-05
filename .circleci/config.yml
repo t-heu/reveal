@@ -7,11 +7,8 @@ executors:
     docker:
      - image: circleci/node:12
     working_directory: ~/backend
-jobs:
-  deploy_backend:
-    executor: default
 workflows:
   heroku_deploy:
     jobs:
-      - deploy_backend
+      - executor: default
       - heroku/deploy-via-git
