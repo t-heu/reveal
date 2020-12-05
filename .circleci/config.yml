@@ -3,7 +3,8 @@ orbs:
   node: circleci/node@3.0.0
   heroku: circleci/heroku@0.0.10
 steps:
-  run: cd/backend
+  - checkout
+  - run: cd/backend
 workflows:
   heroku_deploy:
     jobs:
