@@ -9,6 +9,6 @@ executors:
     working_directory: ~/backend
 workflows:
   heroku_deploy:
+    executor: default
     jobs:
-      - executor: default
       - heroku/deploy-via-git
