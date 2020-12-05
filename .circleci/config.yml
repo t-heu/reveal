@@ -2,11 +2,13 @@ version: 2.1
 orbs:
   node: circleci/node@3.0.0
   heroku: circleci/heroku@0.0.10
+executors:
+  default:
+    working_directory: ~/backend
 deployment:
   production:
     branch: master
     commands:
-    - cd/backend
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
 workflows:
   heroku_deploy:
