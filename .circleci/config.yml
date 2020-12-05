@@ -5,6 +5,6 @@ orbs:
 workflows:
   heroku_deploy:
     jobs:
-      - heroku/deploy-via-git
       - steps:
           command: cd backend
+      - heroku/deploy-via-git
