@@ -4,6 +4,7 @@ orbs:
   heroku: circleci/heroku@0.0.10
 workflows:
   heroku_deploy:
-    jobs:
+    commands:
       - cd backend
+    jobs:
       - heroku/deploy-via-git
