@@ -2,10 +2,17 @@ version: 2.1
 orbs:
   node: circleci/node@3.0.0
   heroku: circleci/heroku@0.0.10
+commands:
+  attach_project:
+    steps:
+      - attach_workspace:
+          at: ~/backend
+jobs:
+  deploy_backend:
+    steps:
+      - attach_project
+      - deploy-via-git
 workflows:
-  heroku_deploy:
+  deploy:
     jobs:
-      - steps:
-        - checkout:
-            path: ~/backend
-      - heroku/deploy-via-git
+      - deploy_backend
