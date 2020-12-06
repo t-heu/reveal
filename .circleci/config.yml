@@ -20,5 +20,6 @@ jobs:
 workflows:
   heroku_deploy:
     jobs:
-      - deploy_backend
-      - heroku/deploy-via-git
+      - heroku/deploy-via-git:
+        requires:
+          - deploy_backend
