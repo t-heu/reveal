@@ -2,6 +2,11 @@ version: 2.1
 orbs:
   node: circleci/node@3.0.0
   heroku: circleci/heroku@0.0.10
+executors:
+  default:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/project
 commands:
   attach_project:
     steps:
@@ -9,6 +14,7 @@ commands:
           at: ~/backend
 jobs:
   deploy_backend:
+    executor: default
     steps:
       - attach_project
       - deploy-via-git
