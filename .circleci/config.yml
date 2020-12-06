@@ -18,7 +18,7 @@ jobs:
     steps:
       - attach_project
 workflows:
-  deploy:
+  heroku_deploy:
     jobs:
       - deploy_backend
-      - deploy-via-git
+      - heroku/deploy-via-git
