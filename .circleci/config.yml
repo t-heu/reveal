@@ -17,8 +17,8 @@ jobs:
     executor: default
     steps:
       - attach_project
-      - deploy-via-git
 workflows:
   deploy:
     jobs:
       - deploy_backend
+      - deploy-via-git
