@@ -5,6 +5,7 @@ orbs:
 workflows:
   heroku_deploy:
     jobs:
-      - build:
-        working_directory: ~/backend
+      - steps:
+        - checkout:
+            path: ~/backend
       - heroku/deploy-via-git
