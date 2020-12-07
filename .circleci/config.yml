@@ -9,8 +9,8 @@ jobs:
       - checkout
       - heroku/install
       - run:
-          command: cd backend
-      - heroku/deploy-via-git
+          working_directory: ~/backend
+          command: heroku/deploy-via-git
 workflows:
   heroku_deploy:
     jobs:
