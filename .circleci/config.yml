@@ -8,8 +8,8 @@ jobs:
     steps:
       - checkout
       - heroku/install
-      - run:
-          working_directory: ~/backend
+      # - run:
+      - working_directory: ~/backend
       - heroku/deploy-via-git
 workflows:
   heroku_deploy:
