@@ -10,7 +10,7 @@ jobs:
       - heroku/install
       - run:
           working_directory: ~/backend
-          heroku/deploy-via-git
+      - heroku/deploy-via-git
 workflows:
   heroku_deploy:
     jobs:
