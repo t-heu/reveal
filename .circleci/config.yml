@@ -5,11 +5,11 @@ orbs:
 jobs:
   deploy:
     executor: heroku/default
+    working_directory: ~/backend
     steps:
       - checkout
       - heroku/install
       # - run:
-      - working_directory: ~/backend
       - heroku/deploy-via-git
 workflows:
   heroku_deploy:
